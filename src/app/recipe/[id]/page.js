@@ -36,16 +36,19 @@ export default function RecipeDetails() {
       width="16"
       height="16"
       viewBox="0 0 24 24"
+      fill="currentColor"
     >
       <path d="M18 1l-6 4-6-4-6 5v7l12 10 12-10v-7z" />
     </svg>
   );
 
   const renderInstructions = () => {
+    if (!recipe) return null;
+    
     if (recipe.instructions) {
       return (
         <div 
-          className="text-sm text-slate-800"
+          className="prose prose-slate prose-sm max-w-none"
           dangerouslySetInnerHTML={{ __html: recipe.instructions }}
         />
       );
@@ -53,9 +56,9 @@ export default function RecipeDetails() {
     
     if (recipe.analyzedInstructions && recipe.analyzedInstructions.length > 0) {
       return (
-        <ol className="list-decimal pl-5">
+        <ol className="list-decimal pl-5 space-y-3">
           {recipe.analyzedInstructions[0].steps.map((step) => (
-            <li key={step.number} className="text-sm text-slate-800 mb-2">
+            <li key={step.number} className="text-sm text-slate-800">
               {step.step}
             </li>
           ))}
@@ -63,26 +66,27 @@ export default function RecipeDetails() {
       );
     }
     
-    return <p className="text-sm text-slate-500">No instructions available.</p>;
+    return <p className="text-sm text-slate-500 italic">No instructions available.</p>;
   };
 
   if (loading) {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center bg-slate-50 pt-24">
+      <main className="flex min-h-screen flex-col items-center justify-center bg-white">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-slate-700"></div>
-        <p className="mt-4">Loading recipe...</p>
+        <p className="mt-4 text-slate-600">Loading recipe details...</p>
       </main>
     );
   }
 
   if (error) {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center bg-slate-50 pt-24">
-        <div className="text-red-500 text-center p-4">
-          <h2 className="text-xl font-bold mb-4">Error Loading Recipe</h2>
-          <p>{error.message}</p>
-          <Link href="/" className="inline-block mt-6 py-2 px-5 text-sm font-medium text-gray-900 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-slate-800">
-            ← Back to Recipes
+      <main className="flex min-h-screen flex-col items-center justify-center bg-white">
+        <div className="text-center max-w-md px-6">
+          <div className="text-5xl mb-6">😔</div>
+          <h2 className="text-xl font-bold mb-4 text-slate-800">Unable to Load Recipe</h2>
+          <p className="text-slate-600 mb-8">{error.message}</p>
+          <Link href="/" className="inline-block py-2 px-6 text-sm font-medium text-white bg-slate-700 rounded-lg hover:bg-slate-800 transition-colors">
+            ← Return to Recipes
           </Link>
         </div>
       </main>
@@ -91,9 +95,9 @@ export default function RecipeDetails() {
 
   if (!recipe) {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center bg-slate-50 pt-24">
-        <p className="text-center">Recipe not found.</p>
-        <Link href="/" className="inline-block mt-6 py-2 px-5 text-sm font-medium text-gray-900 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-slate-800">
+      <main className="flex min-h-screen flex-col items-center justify-center bg-white">
+        <p className="text-center text-slate-600">Recipe not found.</p>
+        <Link href="/" className="inline-block mt-6 py-2 px-5 text-sm font-medium text-white bg-slate-700 rounded-lg hover:bg-slate-800 transition-colors">
           ← Back to Recipes
         </Link>
       </main>
@@ -101,93 +105,125 @@ export default function RecipeDetails() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between pt-16 bg-slate-50 sm:pt-8">
-      <header className="flex flex-col md:flex-row md:items-center md:justify-between md:max-w-screen-lg w-full sm:flex-col md:px-8 sm:px-4 sm:justify-start">
-        <Link className="text-sm" href="/">
-          <h1 className="flex gap-4 text-lg items-center md:mb-0 sm:mb-4">
+    <main className="min-h-screen bg-white">
+      {/* Header */}
+      <header className="fixed top-0 start-0 z-40 w-full bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100 py-4 px-6 md:px-12">
+        <div className="max-w-screen-lg mx-auto flex justify-between items-center">
+          <Link href="/" className="flex gap-3 text-xl font-medium items-center text-slate-800 hover:text-slate-600 transition-colors">
             {logo} Recipe Book
-          </h1>
-        </Link>
-        <Link href="/" className="rounded-md bg-slate-100 py-2 px-4 text-sm text-slate-900 hover:bg-slate-200">
-          Back to Recipes
-        </Link>
+          </Link>
+          <Link href="/" className="rounded-full bg-slate-100 py-2 px-4 text-sm text-slate-800 hover:bg-slate-200 transition-colors">
+            ← Back to Recipes
+          </Link>
+        </div>
       </header>
 
-      <div className="lg:gap-x-12 lg:gap-y-2 lg:w-full bg-slate-50 lg:max-w-screen-lg m-auto md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-2 md:px-8 sm:grid-cols-1 sm:px-4">
-        <div className="padding-6 flex content-center items-center aspect-square bg-slate-100 lg:mb-0 sm:mb-6">
-          <div className="relative w-full object-contain aspect-square bg-slate-100 transition-all duration-150 hover:bg-[#EDF1F7]">
-            <Image
-              className="object-contain w-full h-full transition-all duration-150 p-12"
-              fill={true}
-              src={recipe.image}
-              alt={recipe.title}
-              sizes="100%"
-              priority
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-col items-start justify-center">
-          <h2 className="text-2xl font-bold text-slate-800">
-            {recipe.title}
-          </h2>
-          <div className="flex gap-4 text-sm text-slate-500 mt-2 mb-6">
-            {recipe.readyInMinutes && <p>{recipe.readyInMinutes} mins</p>}
-            {recipe.readyInMinutes && recipe.servings && <p>•</p>}
-            {recipe.servings && <p>{recipe.servings} servings</p>}
-          </div>
-
-          {recipe.summary && (
-            <div className="mb-6">
-              <div 
-                className="text-sm text-slate-600"
-                dangerouslySetInnerHTML={{ __html: recipe.summary }}
-              />
+      {/* Main Content */}
+      <div className="pt-24 pb-16 px-6">
+        <div className="max-w-screen-lg mx-auto">
+          {/* Recipe Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-slate-800 mb-2">{recipe.title}</h1>
+            <div className="flex flex-wrap gap-3 mb-4">
+              {recipe.readyInMinutes && (
+                <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700">
+                  ⏱️ {recipe.readyInMinutes} minutes
+                </span>
+              )}
+              {recipe.servings && (
+                <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700">
+                  👥 {recipe.servings} servings
+                </span>
+              )}
             </div>
-          )}
-
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-2">Ingredients</h3>
-            {recipe.extendedIngredients && recipe.extendedIngredients.length > 0 ? (
-              <ul className="list-disc pl-5">
-                {recipe.extendedIngredients.map((ingredient) => (
-                  <li key={ingredient.id} className="text-sm text-slate-800 mb-2">
-                    {ingredient.original}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-sm text-slate-500">No ingredients available.</p>
-            )}
           </div>
 
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-2">Instructions</h3>
-            {renderInstructions()}
-          </div>
+          {/* Recipe Content */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            {/* Left Column - Image */}
+            <div className="h-full">
+              <div className="relative aspect-square rounded-2xl overflow-hidden bg-slate-100 border border-slate-200">
+                <Image
+                  className="object-cover w-full h-full"
+                  fill={true}
+                  src={recipe.image}
+                  alt={recipe.title}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority={true}
+                  onError={(e) => {
+                    e.currentTarget.src = '/placeholder-recipe.jpg';
+                  }}
+                />
+              </div>
 
-          <div className="flex gap-2">
-            <Link href="/">
-              <button
-                type="button"
-                className="py-2 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-slate-800 focus:z-10 focus:ring-1 focus:ring-gray-200"
-              >
-                ← Back to Recipes
-              </button>
-            </Link>
-            {recipe.sourceUrl && (
-              <a 
-                href={recipe.sourceUrl} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="py-2 px-5 me-2 mb-2 text-sm font-medium text-white bg-slate-700 hover:bg-slate-800 rounded-lg"
-              >
-                View Original Recipe
-              </a>
-            )}
+              {recipe.summary && (
+                <div className="mt-8 bg-slate-50 rounded-xl p-6 border border-slate-100">
+                  <h2 className="text-lg font-semibold text-slate-800 mb-3">About this Recipe</h2>
+                  <div 
+                    className="text-sm text-slate-600 prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: recipe.summary }}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Right Column - Details */}
+            <div>
+              {/* Ingredients Section */}
+              <div className="mb-8">
+                <div className="flex items-center gap-2 mb-4">
+                  <h2 className="text-xl font-semibold text-slate-800">Ingredients</h2>
+                  {recipe.servings && (
+                    <span className="text-sm text-slate-500">for {recipe.servings} servings</span>
+                  )}
+                </div>
+                
+                {recipe.extendedIngredients && recipe.extendedIngredients.length > 0 ? (
+                  <ul className="space-y-3">
+                    {recipe.extendedIngredients.map((ingredient) => (
+                      <li key={ingredient.id} className="flex items-start gap-3">
+                        <span className="inline-flex items-center justify-center bg-slate-100 rounded-full w-6 h-6 text-xs text-slate-600 mt-0.5">•</span>
+                        <span className="text-sm text-slate-700">{ingredient.original}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-slate-500 italic">No ingredients available.</p>
+                )}
+              </div>
+
+              {/* Instructions Section */}
+              <div className="mb-8">
+                <h2 className="text-xl font-semibold text-slate-800 mb-4">Instructions</h2>
+                {renderInstructions()}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-3 mt-8">
+                <Link href="/">
+                  <button
+                    type="button"
+                    className="py-2 px-5 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
+                  >
+                    ← Back to Recipes
+                  </button>
+                </Link>
+                {recipe.sourceUrl && (
+                  <a 
+                    href={recipe.sourceUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="py-2 px-5 text-sm font-medium text-white bg-slate-700 hover:bg-slate-800 rounded-lg transition-colors"
+                  >
+                    View Original Recipe →
+                  </a>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
       <Footer />
     </main>
   );
