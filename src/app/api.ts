@@ -4,6 +4,14 @@ import { useState, useEffect } from 'react';
 const API_KEY = 'be1072c4410843daabd69776ffc3006f';
 const BASE_URL = 'https://api.spoonacular.com';
 
+// Enhanced cache implementation
+let recipesCache: Recipe[] = [];
+let lastFetchTime = 0;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+// Add request deduplication
+let ongoingRequest: Promise<Recipe[]> | null = null;
+
 export interface Recipe {
   id: number;
   title: string;
@@ -38,82 +46,65 @@ export interface DetailedRecipe extends Recipe {
 
 export const api = {
   async getRandomRecipes(number: number = 8): Promise<Recipe[]> {
+    const now = Date.now();
+    
+    // Return cache if valid
+    if (recipesCache.length > 0 && (now - lastFetchTime) < CACHE_DURATION) {
+      return recipesCache;
+    }
+
+    // Return ongoing request if exists
+    if (ongoingRequest) {
+      return ongoingRequest;
+    }
+
     try {
-      const response = await axios.get(`${BASE_URL}/recipes/random`, {
+      // Create new request and store it
+      ongoingRequest = axios.get(`${BASE_URL}/recipes/random`, {
         params: {
           apiKey: API_KEY,
-          number: 8, // Force exactly 8 recipes
-          // Add tags to get better variety of recipes
+          number: 8,
           tags: 'main course,dinner,lunch,breakfast',
         },
         timeout: 8000
-      });
-      
-      if (!response.data || !response.data.recipes || response.data.recipes.length === 0) {
-        throw new Error('No recipes returned from API');
-      }
-      
-      // Update the transformedRecipes mapping in getRandomRecipes
-      const transformedRecipes = response.data.recipes.map((recipe: any) => ({
-        id: recipe.id,
-        title: recipe.title,
-        // Fix the image URL format
-        image: recipe.image 
-          ? `https://spoonacular.com/recipeImages/${recipe.id}-480x360.jpg` 
-          : '/placeholder-recipe.jpg',
-        summary: recipe.summary || '',
-        readyInMinutes: recipe.readyInMinutes,
-        servings: recipe.servings,
-        sourceUrl: recipe.sourceUrl
-      }));
+      }).then(response => {
+        if (!response.data?.recipes?.length) {
+          throw new Error('No recipes returned from API');
+        }
+        
+        const transformedRecipes = response.data.recipes.map((recipe: any) => ({
+          id: recipe.id,
+          title: recipe.title,
+          image: recipe.image 
+            ? `https://spoonacular.com/recipeImages/${recipe.id}-480x360.jpg` 
+            : '/placeholder-recipe.jpg',
+          summary: recipe.summary || '',
+          readyInMinutes: recipe.readyInMinutes,
+          servings: recipe.servings,
+          sourceUrl: recipe.sourceUrl
+        }));
 
-      return transformedRecipes;
+        // Update cache
+        recipesCache = transformedRecipes;
+        lastFetchTime = now;
+
+        return transformedRecipes;
+      });
+
+      const result = await ongoingRequest;
+      ongoingRequest = null; // Clear ongoing request
+      return result;
       
     } catch (error) {
-      try {
-        return await this.getPopularRecipes(number);
-      } catch (fallbackError) {
-        throw new Error(`Failed to fetch recipes: ${error.response?.data?.message || error.message}`);
-      }
-    }
-  },
-
-  async getPopularRecipes(number: number = 20): Promise<Recipe[]> {
-    try {
-      const response = await axios.get(`${BASE_URL}/recipes/complexSearch`, {
-        params: {
-          apiKey: API_KEY,
-          number: number,
-          sort: 'popularity',
-          addRecipeInformation: true,
-          fillIngredients: true
-        },
-        timeout: 8000
-      });
-      
-      if (!response.data || !response.data.results || response.data.results.length === 0) {
-        throw new Error('No popular recipes found');
-      }
-      
-      // Also update the getPopularRecipes mapping
-      return response.data.results.map((recipe: any) => ({
-        id: recipe.id,
-        title: recipe.title,
-        // Fix the image URL format
-        image: recipe.image 
-          ? `https://spoonacular.com/recipeImages/${recipe.id}-480x360.jpg`
-          : '/placeholder-recipe.jpg',
-        summary: recipe.summary || '',
-        readyInMinutes: recipe.readyInMinutes,
-        servings: recipe.servings,
-        sourceUrl: recipe.sourceUrl
-      }));
-    } catch (error) {
-      throw error;
+      ongoingRequest = null; // Clear ongoing request on error
+      throw new Error(`Failed to fetch recipes: ${error.response?.data?.message || error.message}`);
     }
   },
 
   async getRecipeById(id: number): Promise<DetailedRecipe> {
+    // Check if recipe exists in cache first
+    const cachedRecipe = recipesCache.find(r => r.id === id);
+    
     try {
       const response = await axios.get(`${BASE_URL}/recipes/${id}/information`, {
         params: {
@@ -125,11 +116,9 @@ export const api = {
       
       const recipe = response.data;
       
-      // Update getRecipeById return
       return {
         id: recipe.id,
         title: recipe.title,
-        // Fix the image URL format
         image: recipe.image 
           ? `https://spoonacular.com/recipeImages/${recipe.id}-480x360.jpg`
           : '/placeholder-recipe.jpg',
@@ -142,11 +131,27 @@ export const api = {
         sourceUrl: recipe.sourceUrl
       };
     } catch (error) {
+      if (cachedRecipe) {
+        // Return partial data from cache if API fails
+        return {
+          ...cachedRecipe,
+          instructions: '',
+          extendedIngredients: [],
+          analyzedInstructions: []
+        };
+      }
       throw new Error(`Failed to fetch recipe details: ${error.response?.data?.message || error.message}`);
     }
   },
 
+  // Update getSimilarRecipes to be more efficient
   async getSimilarRecipes(id: number): Promise<Recipe[]> {
+    // First check if we have enough recipes in cache
+    if (recipesCache.length >= 4) {
+      const filtered = recipesCache.filter(r => r.id !== id);
+      return filtered.slice(0, 4);
+    }
+
     try {
       const response = await axios.get(`${BASE_URL}/recipes/${id}/similar`, {
         params: {
@@ -156,41 +161,15 @@ export const api = {
         timeout: 5000
       });
       
-      const similarRecipes = await Promise.all(
-        response.data.slice(0, 4).map(async (recipe: any) => {
-          try {
-            const detailResponse = await axios.get(`${BASE_URL}/recipes/${recipe.id}/information`, {
-              params: {
-                apiKey: API_KEY,
-                includeNutrition: false
-              },
-              timeout: 3000
-            });
-            
-            return {
-              id: detailResponse.data.id,
-              title: detailResponse.data.title,
-              image: detailResponse.data.image || '/placeholder-recipe.jpg',
-              summary: detailResponse.data.summary || '',
-              readyInMinutes: detailResponse.data.readyInMinutes,
-              servings: detailResponse.data.servings,
-              sourceUrl: detailResponse.data.sourceUrl
-            };
-          } catch (err) {
-            return {
-              id: recipe.id,
-              title: recipe.title,
-              image: '/placeholder-recipe.jpg',
-              summary: '',
-              readyInMinutes: 0,
-              servings: 0,
-              sourceUrl: ''
-            };
-          }
-        })
-      );
-      
-      return similarRecipes;
+      return response.data.slice(0, 4).map((recipe: any) => ({
+        id: recipe.id,
+        title: recipe.title,
+        image: `https://spoonacular.com/recipeImages/${recipe.id}-480x360.jpg`,
+        summary: '',
+        readyInMinutes: recipe.readyInMinutes || 0,
+        servings: recipe.servings || 0,
+        sourceUrl: recipe.sourceUrl || ''
+      }));
     } catch (error) {
       return [];
     }
@@ -198,30 +177,44 @@ export const api = {
 };
 
 export const useRecipes = () => {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [recipes, setRecipes] = useState<Recipe[]>(() => recipesCache);
+  const [loading, setLoading] = useState(!recipesCache.length);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
+    let mounted = true;
+
     const fetchRecipes = async () => {
+      // Don't fetch if we already have cached data
+      if (recipesCache.length > 0) {
+        return;
+      }
+
       try {
         setLoading(true);
         setError(null);
-        
-        // Change to fetch 8 recipes
         const data = await api.getRandomRecipes(8);
-        setRecipes(data);
-        
+        if (mounted) {
+          setRecipes(data);
+        }
       } catch (err) {
-        setError(err instanceof Error ? err : new Error('Failed to fetch recipes'));
-        setRecipes([]);
+        if (mounted) {
+          setError(err instanceof Error ? err : new Error('Failed to fetch recipes'));
+          setRecipes([]);
+        }
       } finally {
-        setLoading(false);
+        if (mounted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchRecipes();
-  }, []);
+
+    return () => {
+      mounted = false;
+    };
+  }, []); // Empty dependency array
 
   return { recipes, loading, error };
 };
