@@ -1,0 +1,279 @@
+[
+  {
+    "title": "Penco Bag Stand",
+    "description": "Desk Accessories",
+    "notes": "£39.99 from The Journal Shop",
+    "body": "Porcelain craft-bag as pen stand on the desk or compact flower vase and art object on the shelf.",
+    "type": ["all", "home","want"],
+    "url": "/images/penco-bag.png",
+    "alt": "A porcelain paper bag",
+    "storeLink": "https://www.thejournalshop.com/products/hightide-penco-brown-bag-stand"
+  },
+  {
+    "title": "Black clay teapot",
+    "description": "Teapot",
+    "notes": "£82.00 from Nordic Nest",
+    "body": "A teapot by Design House Stockholm made of high-fired stoneware with a tea strainer.",
+    "type": ["all", "home", "want"],
+    "url": "/images/teapot.png",
+    "alt": "Black clay teapot from Swedish Design House Stockholm",
+    "storeLink": "https://www.nordicnest.com/brands/design-house-stockholm/sand-teapot-65-cl/?variantId=512351-01"
+    },
+    {
+      "title": "Ami de Coeur Sweater",
+      "description": "Sweater",
+      "body": "Felted merino wool with inside out seams - extremely warm and snug.",
+      "notes": "Purchased from Paris, France",
+      "type": ["all", "wardrobe"],
+      "url": "/images/ami-jumper.png",
+      "alt": "A black wool turtleneck jumper from Ami"
+    },
+  {
+    "title": "MOHEIM Stoneware Mug",
+    "description": "Mug",
+    "body": "Designed by Shigeichiro Takeuchi in Fukui, Japan. Handmade in Vietnam. Grey stoneware.",
+    "notes": "Purchased in Glasgow, Scotland",
+    "type": ["all", "home"],
+    "url": "/images/moheim-mug.png",
+    "alt": "Sand stoneware mug from MOHEIM"
+  },
+  {
+    "title": "Pandemic Objects",
+    "description": "Book",
+    "body": "An editorial project from the V&A reflecting on objects with new meanings during the COVID-19 pandemic.",
+    "notes": "Purchased in Glasgow, Scotland",
+    "type": ["all", "books"],
+    "url": "/images/pandemic-objects.png",
+    "alt": "Pandemic Objects from the V&A"
+  },
+  {
+    "title": "Solvem Probler",
+    "description": "Cap",
+    "notes": "Purchased from USA",
+    "body": "If you get it, you get it. It sounds silly but also so perfect for a working product designer.",
+    "type": ["all", "wardrobe"],
+    "url": "/images/solvem-probler.png",
+    "alt": "A navy blue hat with white embroided text"
+    },
+  {
+    "title": "Gathering of Strangers",
+    "description": "Book",
+    "notes": "Purchased in Glasgow, Scotland",
+    "body": "A book exploring the transformative role of the museum and art in society today - it reminder me of the concepts of the grand tour, wunderkammer and the flâneur.",
+    "type": ["all", "books"],
+    "url": "/images/gathering-of-strangers.png",
+    "alt": "Orange book titled Gathering of Strangers by Maria Balshaw"
+  },
+  {
+    "title": "Capitol Cuts",
+    "description": "Vinyl",
+    "notes": "Purchased in Glasgow, Scotland",
+    "body": "One of my newly discovered favourites, Black Pumas is one of the latest addition to the vinyl collection.",
+    "type": ["all", "home"],
+    "url": "/images/capitol-cuts.png",
+    "alt": "A red vinyl from Black Pumas"
+  },
+  {
+    "title": "Acne Studios Atton Face",
+    "description": "Bag",
+    "notes": "Purchased in Glasgow, Scotland",
+    "body": "Waterproof, recycled ripstop backpack for the everyday commute.",
+    "type": ["all", "work"],
+    "url": "/images/atton-face.png",
+    "alt": "A waterproof, black ripstop backpack from Acne Studios"
+  },
+  {
+    "title": "Twemco Cylinder Flip Clock",
+    "description": "Clock",
+    "notes": "£115.00 from Present & Correct",
+    "body": "Sleek, battery operated desk clocks which are housed within a neat, crisp cylinder. Made in Hong Kong since 1968.",
+    "type": ["all", "home","want"],
+    "url": "/images/twemco-clock.png",
+    "alt": "A black, analog cylinder flip clock",
+    "storeLink": "https://www.presentandcorrect.com/products/copy-of-cylinder-flip-clock"
+  },
+  {
+    "title": "Kismas Linear Lamp 01",
+    "description": "Lamp",
+    "notes": "€139,00 from Kismas",
+    "body": "A steel lighting base and a modern, newly made glass block with 7 dimmable colour tones.",
+    "type": ["all", "home", "want"],
+    "url": "/images/kismas.png",
+    "alt": "A dimmable glass lamp from Kismas Design Studio",
+    "storeLink": "https://kismas.com/products/linear-lamp-01"
+  },
+  {
+    "title": "Analog Today",
+    "description": "Notepad",
+    "notes": "£11.00 from Ugmonk",
+    "body": "The simplest productivity system - 76mm x 127mm printed on 100# smooth uncoated paper with smooth corners.",
+    "type": ["all", "work", "want"],
+    "url": "/images/analog-today.png",
+    "alt": "Minimalist notepad with a list for today",
+    "storeLink": "https://ugmonk.com/en-gb/products/analog-today-cards-1-pack?variant=42879313412246"
+  },
+  {
+    "title": "Small Transparent Speaker",
+    "description": "Speakers",
+    "notes": "£450.00 from Transparent",
+    "body": "Made out of tempered glass and aluminium - 3.3kg and about 268mm x 203 mm x 95mm",
+    "type": ["all", "work", "home", "want"],
+    "url": "/images/transparent-speaker.png",
+    "alt": "Transparent rectangular speaker with black accents",
+    "storeLink": "https://transpa.rent/en/small-transparent-speaker-black"
+  },
+  {
+    "title": "Ricoh GR IIIx",
+    "description": "Camera",
+    "body": "It does its job well and I love the pocket factor, user modes and handy recipes.",
+    "notes": "Purchased in Glasgow, Scotland",
+    "type": ["all", "work"],
+    "url": "/images/ricoh.png",
+    "alt": "A pocketable Ricoh GR IIIx camera in black"
+  },
+  {
+    "title": "Anya Hindmarch Kit Kat",
+    "description": "Bag charm",
+    "body": "This was a surprise Christmas gift inspired by an inside joke. It is my emergency kit kat for moments when my blood sugar levels drop.",
+    "notes": "A gift from Florence, Italy",
+    "type": ["all", "wardrobe"],
+    "url": "/images/kitkat.png",
+    "alt": "A kit kat bar made in leather from Anya Hindmarch"
+  },
+  {
+    "title": "Aesop Rozu",
+    "description": "Eau de Parfum",
+    "body": "Inspired by French modernist Charlotte Perriand, it is a fragrance of tender intensity. Floral, green and woody.",
+    "notes": "A gift from Glasgow, Scotland",
+    "type": ["all", "wardrobe"],
+    "url": "/images/aesop-rozu.png",
+    "alt": "An amber glass Aesop perfume bottle with a black cap"
+  },
+  {
+    "title": "Audo CPH JWDA Lamp",
+    "description": "Lamp",
+    "body": "Inspired by traditional oil lamps and crafted in glass, solid metal and a brass dimmer switch, the JWDA Portable has the freedom and flexibility to move anywhere you want.",
+    "notes": "Purchased from Stockholm, Sweden",
+    "type": ["all", "home"],
+    "url": "/images/jwda-lamp.png",
+    "alt": "Minimal JWDA dimmable lamp from Audo Copenhagen"
+  },
+  {
+    "title": "Blue Lucky Cat",
+    "description": "Decorative object",
+    "body": "Three friends walked into Illum and three lucky cats were purchased - blue, orange and green. And now, each cat sits somewhere, in each designer’s house.",
+    "notes": "Purchased in Copenhagen, Denmark",
+    "type": ["all", "home"],
+    "url": "/images/lucky-cat.png",
+    "alt": "A blue lucky cat with a waving arm"
+  },
+  {
+    "title": "Bao",
+    "description": "Book",
+    "body": "I love food, clean design and physical books. Strictly for viewing pleasure, never attempted making a steamed bun.",
+    "notes": "A gift from London, England",
+    "type": ["all", "books"],
+    "url": "/images/bao.png",
+    "alt": "A blue lucky cat with a waving arm"
+  },
+  {
+    "title": "White",
+    "description": "Book",
+    "body": "White is not a book about colour but about exploring the essence of 'white' that is closed tied to Japanese aesthetics of simplicity and subtlety.",
+    "notes": "Purchased in Glasgow, Scotland",
+    "type": ["all", "books"],
+    "url": "/images/white.png",
+    "alt": "A book exploring the concept of white by Kenya Hara"
+  },
+  {
+    "title": "Creative Selection",
+    "description": "Book",
+    "notes": "Purchased in Glasgow, Scotland",
+    "body": "Thsi is still one of my favourite “product” books to date - favourite snippet was about how the keyboard on iPhones were made.",
+    "type": ["all", "books"],
+    "url": "/images/creative-selection.png",
+    "alt": "A book that talks design and minimalism by Kenya Hara"
+  },
+  {
+    "title": "Baggu Puffy Sleeve",
+    "description": "Laptop cover",
+    "body": "I love this because it's bright, fun, puffy and does the job of protecting my laptop in my bag.",
+    "notes": "Purchased in Glasgow, Scotland",
+    "type": ["all", "work"],
+    "url": "/images/baggu.png",
+    "alt": "Orange puffy laptop sleeve with a banana print"
+  },
+  {
+    "title": "Stax River Hamburger",
+    "description": "Coasters",
+    "notes": "Purchased in Glasgow, Scotland",
+    "body": "Who doesn't love a hamburger coaster when it's well designed with the lettuce doubling up as a funnel holder?",
+    "type": ["all", "home"],
+    "url": "/images/stax-burger.png",
+    "alt": "A set of wooden coasters that form a hamburger"
+  },
+  {
+    "title": "Small Pleasures",
+    "description": "Book",
+    "notes": "Purchased in Berlin, Germany",
+    "body": "A souvenir from The School of Life store just around my old workplace, it is a beautifully written book that reminds us the joy of the small things in life.",
+    "type": ["all", "books"],
+    "url": "/images/small-pleasures.png",
+    "alt": "Small Pleasures book by The School of Life"
+  },
+  {
+    "title": "DOIY Bento",
+    "description": "Lunch box",
+    "notes": "A gift from Glasgow, Scotland",
+    "body": "Probably a designer thing but I love the playful yet functional design, it made my sad looking lunches so much happier. ",
+    "type": ["all", "home"],
+    "url": "/images/DOIY.png",
+    "alt": "A two tiered lunch box thar looks like a salmon sashimi"
+  },
+  {
+    "title": "IKEA Frekvens",
+    "description": "Light and speaker",
+    "notes": "A gift from Berlin, Germany",
+    "body": "Modular speaker system from IKEA x Teenage Engineering - it was my first design gift from a group of designers.",
+    "type": ["all", "home"],
+    "url": "/images/frekvens.png",
+    "alt": "An IKEA square, black speaker that also doubles as a lamp"
+  },
+  {
+    "title": "Birkenstock Gizeh",
+    "description": "Slippers",
+    "body": "The better looking, well supported and well worn flip flops for my duck feet",
+    "notes": "Purchased in Berlin, Germany",
+    "type": ["all", "wardrobe"],
+    "url": "/images/birkenstocks.png",
+    "alt": "Stone coloured leather Birkenstock sandals"
+  },
+  {
+    "title": "Horizn Studio Gion",
+    "description": "Crossbody bag",
+    "body": "Simple, water-repellent, black and it fits my phone, wallet and keys.",
+    "notes": "Purchased in Berlin, Germany",
+    "type": ["all", "wardrobe"],
+    "url": "/images/gion.png",
+    "alt": "A black waterproof bum bag from Horizn Studio"
+  },
+  {
+    "title": "Totem (2019)",
+    "description": "Book",
+    "body": "Totem - a limited edition souvenir from the design conference, OFFF in Barcelona, 2019.",
+    "notes": "A gift from Barcelona, Spain",
+    "type": ["all", "books"],
+    "url": "/images/totem.png",
+    "alt": "A black limited edition book from the OFFF festival in Barcelona"
+  },
+  {
+    "title": "Keychron Q1 QMK (Custom)",
+    "description": "Wireless keyboard",
+    "notes": "£167.00 from Keychron",
+    "body": "Fully assembled knob, carbon black A - it weighs about 483g and measures 306mm x 116mm.",
+    "type": ["all", "work", "want"],
+    "url": "/images/keychron.png",
+    "alt": "A wireless mechnical keyboard from Keychron",
+    "storeLink": "https://www.keychron.uk/products/keychron-q1-qmk-custom-mechanical-keyboard-iso-layout-collection"
+  }
+]
