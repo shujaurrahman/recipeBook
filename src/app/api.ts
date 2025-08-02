@@ -1,15 +1,26 @@
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useState, useEffect } from 'react';
 
 const API_KEY = 'be1072c4410843daabd69776ffc3006f';
 const BASE_URL = 'https://api.spoonacular.com';
 
-// Enhanced cache implementation
+// Type definitions
+interface ApiError {
+  message: string;
+  status?: number;
+}
+
+interface ApiResponse {
+  recipes: any[];
+  data?: {
+    message?: string;
+  };
+}
+
+// Cache implementation
 let recipesCache: Recipe[] = [];
 let lastFetchTime = 0;
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
-
-// Add request deduplication
+const CACHE_DURATION = 5 * 60 * 1000;
 let ongoingRequest: Promise<Recipe[]> | null = null;
 
 export interface Recipe {
@@ -48,19 +59,16 @@ export const api = {
   async getRandomRecipes(number: number = 8): Promise<Recipe[]> {
     const now = Date.now();
     
-    // Return cache if valid
     if (recipesCache.length > 0 && (now - lastFetchTime) < CACHE_DURATION) {
       return recipesCache;
     }
 
-    // Return ongoing request if exists
     if (ongoingRequest) {
       return ongoingRequest;
     }
 
     try {
-      // Create new request and store it
-      ongoingRequest = axios.get(`${BASE_URL}/recipes/random`, {
+      ongoingRequest = axios.get<ApiResponse>(`${BASE_URL}/recipes/random`, {
         params: {
           apiKey: API_KEY,
           number: 8,
@@ -84,7 +92,6 @@ export const api = {
           sourceUrl: recipe.sourceUrl
         }));
 
-        // Update cache
         recipesCache = transformedRecipes;
         lastFetchTime = now;
 
@@ -92,21 +99,36 @@ export const api = {
       });
 
       const result = await ongoingRequest;
-      ongoingRequest = null; // Clear ongoing request
+      ongoingRequest = null;
       return result;
       
-    } catch (error) {
-      ongoingRequest = null; // Clear ongoing request on error
-      throw new Error(`Failed to fetch recipes: ${error.response?.data?.message || error.message}`);
+    } catch (error: unknown) {
+      ongoingRequest = null;
+      
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<ApiError>;
+        throw new Error(
+          `Failed to fetch recipes: ${
+            axiosError.response?.data?.message || 
+            axiosError.message || 
+            'Unknown API error'
+          }`
+        );
+      }
+      
+      throw new Error(
+        `Failed to fetch recipes: ${
+          error instanceof Error ? error.message : 'Unknown error'
+        }`
+      );
     }
   },
 
   async getRecipeById(id: number): Promise<DetailedRecipe> {
-    // Check if recipe exists in cache first
     const cachedRecipe = recipesCache.find(r => r.id === id);
     
     try {
-      const response = await axios.get(`${BASE_URL}/recipes/${id}/information`, {
+      const response = await axios.get<DetailedRecipe>(`${BASE_URL}/recipes/${id}/information`, {
         params: {
           apiKey: API_KEY,
           includeNutrition: false
@@ -130,30 +152,43 @@ export const api = {
         analyzedInstructions: recipe.analyzedInstructions || [],
         sourceUrl: recipe.sourceUrl
       };
-    } catch (error) {
+    } catch (error: unknown) {
       if (cachedRecipe) {
-        // Return partial data from cache if API fails
         return {
           ...cachedRecipe,
           instructions: '',
           extendedIngredients: [],
           analyzedInstructions: []
-        };
+        } as DetailedRecipe;
       }
-      throw new Error(`Failed to fetch recipe details: ${error.response?.data?.message || error.message}`);
+      
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<ApiError>;
+        throw new Error(
+          `Failed to fetch recipe details: ${
+            axiosError.response?.data?.message || 
+            axiosError.message || 
+            'Unknown API error'
+          }`
+        );
+      }
+      
+      throw new Error(
+        `Failed to fetch recipe details: ${
+          error instanceof Error ? error.message : 'Unknown error'
+        }`
+      );
     }
   },
 
-  // Update getSimilarRecipes to be more efficient
   async getSimilarRecipes(id: number): Promise<Recipe[]> {
-    // First check if we have enough recipes in cache
     if (recipesCache.length >= 4) {
       const filtered = recipesCache.filter(r => r.id !== id);
       return filtered.slice(0, 4);
     }
 
     try {
-      const response = await axios.get(`${BASE_URL}/recipes/${id}/similar`, {
+      const response = await axios.get<Recipe[]>(`${BASE_URL}/recipes/${id}/similar`, {
         params: {
           apiKey: API_KEY,
           number: 4
@@ -161,7 +196,7 @@ export const api = {
         timeout: 5000
       });
       
-      return response.data.slice(0, 4).map((recipe: any) => ({
+      return response.data.slice(0, 4).map((recipe: Recipe) => ({
         id: recipe.id,
         title: recipe.title,
         image: `https://spoonacular.com/recipeImages/${recipe.id}-480x360.jpg`,
@@ -170,7 +205,12 @@ export const api = {
         servings: recipe.servings || 0,
         sourceUrl: recipe.sourceUrl || ''
       }));
-    } catch (error) {
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error('Failed to fetch similar recipes:', error.message);
+      } else if (error instanceof Error) {
+        console.error('Failed to fetch similar recipes:', error.message);
+      }
       return [];
     }
   }
@@ -185,7 +225,6 @@ export const useRecipes = () => {
     let mounted = true;
 
     const fetchRecipes = async () => {
-      // Don't fetch if we already have cached data
       if (recipesCache.length > 0) {
         return;
       }
@@ -197,7 +236,7 @@ export const useRecipes = () => {
         if (mounted) {
           setRecipes(data);
         }
-      } catch (err) {
+      } catch (err: unknown) {
         if (mounted) {
           setError(err instanceof Error ? err : new Error('Failed to fetch recipes'));
           setRecipes([]);
@@ -214,7 +253,7 @@ export const useRecipes = () => {
     return () => {
       mounted = false;
     };
-  }, []); // Empty dependency array
+  }, []);
 
   return { recipes, loading, error };
 };
