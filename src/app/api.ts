@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useState, useEffect } from 'react';
 
-const API_KEY = 'be1072c4410843daabd69776ffc3006f';
+const API_KEY = '079106076fdb448fb3abdfa65f70c103';
 const BASE_URL = 'https://api.spoonacular.com';
 
 // Type definitions

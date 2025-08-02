@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="w-full py-6 mt-8 border-t border-slate-100">
+    <footer className="w-full px-6 py-6 mt-8 border-t border-slate-100">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between md:px-8 gap-4">
         <div>
           <p className="text-sm text-slate-500">
@@ -33,6 +33,11 @@ export default function Footer() {
             >
               Spoonacular API
             </a>
+          </p>
+          {/* API Usage Warning */}
+          <p className="text-xs text-amber-600 mt-2 font-medium">
+            ⚠️ Limited to 50 API calls - Please browse responsibly to preserve
+            resources
           </p>
         </div>
 

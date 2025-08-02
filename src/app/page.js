@@ -19,7 +19,7 @@ export default function Home() {
   };
 
   return (
-    <main className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-12 sm:p-4">
+    <main className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       <Header 
         selected={selected} 
         setSelected={setSelected}
@@ -28,16 +28,30 @@ export default function Home() {
         onSearch={handleSearch}
         recipes={recipes}
       />
-      <div className="flex-1 pt-20">
-        <Intro />
-        {/* Grid layout for 8 recipes - 2 rows of 4 */}
-        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-            <Content selected={selected} searchQuery={searchQuery} />
+      
+      {/* Main content area with responsive padding */}
+      <div className="flex-1 pt-20 px-4 sm:px-6 md:px-8 lg:px-12">
+        <div className="max-w-7xl mx-auto">
+          <Intro />
+          
+          {/* Responsive grid container */}
+          <div className="mt-8 sm:mt-12">
+            {/* Grid layout: 
+                - Mobile (< 768px): 1 column
+                - Tablet (768px - 1024px): 2 columns
+                - Large Tablet/Small Desktop (1024px - 1280px): 3 columns
+                - Desktop (> 1280px): 4 columns 
+            */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <Content selected={selected} searchQuery={searchQuery} />
+            </div>
           </div>
         </div>
       </div>
-      <Footer />
+
+      <div className="mt-12">
+        <Footer />
+      </div>
     </main>
   );
 }
